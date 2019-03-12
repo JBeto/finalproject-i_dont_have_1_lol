@@ -30,7 +30,7 @@ configure_logger()
 _logger = logging.getLogger(__name__)
 
 
-GIGABYTE = 1073741824
+GIGABYTE = 2500000  # 1073741824
 
 
 def main():

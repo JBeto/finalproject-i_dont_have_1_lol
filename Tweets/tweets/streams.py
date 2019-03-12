@@ -11,7 +11,9 @@ _logger = logging.getLogger(__name__)
 
 
 def _get_url(tweet_dict):
-    return tweet_dict['entities']['urls'][0]['url'] if tweet_dict['entities']['urls'] else None
+    if 'entities' in tweet_dict and 'urls' in tweet_dict['entities'] and len(tweet_dict['entities']['urls']) > 0:
+        return tweet_dict['entities']['urls'][0]['url']
+    return None
 
 
 def add_url_title(tweet):
@@ -20,7 +22,7 @@ def add_url_title(tweet):
     url = _get_url(tweet_dict)
     if url is not None:
         try:
-            page = requests.get(url)
+            page = requests.get(url, timeout=0.1)
             soup = BeautifulSoup(page.text, 'html.parser')
             tweet_dict['url_title'] = soup.title.string if soup.title is not None else None
         except requests.RequestException as e:
