@@ -4,6 +4,13 @@ import os
 # KEYS / SECRETS #
 ##################
 
+TWEETS_FILE = 'tweets.data'
+LOG_FILE = '../tweets.log'
+
+##################
+# KEYS / SECRETS #
+##################
+
 CONSUMER_KEY = os.environ['CONSUMER_KEY']
 CONSUMER_SECRET = os.environ['CONSUMER_SECRET']
 ACCESS_TOKEN = os.environ['ACCESS_TOKEN']

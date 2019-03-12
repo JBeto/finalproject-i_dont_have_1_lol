@@ -1,3 +1,6 @@
+# Data
+*.data
+
 # Compiled class file
 *.class
 
