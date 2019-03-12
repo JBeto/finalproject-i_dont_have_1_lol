@@ -22,11 +22,11 @@ def add_url_title(tweet):
     url = _get_url(tweet_dict)
     if url is not None:
         try:
-            page = requests.get(url, timeout=0.1)
+            page = requests.get(url, timeout=3)
             soup = BeautifulSoup(page.text, 'html.parser')
             tweet_dict['url_title'] = soup.title.string if soup.title is not None else None
         except requests.RequestException as e:
-            _logger.exception('Error when parsing tweet url title: {}'.format(str(e)))
+            _logger.error('Error when parsing tweet url title: {}'.format(type(e)))
             tweet_dict['url_title'] = None
     else:
         tweet_dict['url_title'] = None

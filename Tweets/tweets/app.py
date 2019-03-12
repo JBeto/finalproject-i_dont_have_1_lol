@@ -45,13 +45,10 @@ def main():
         stream.stream_async_geo_data()
 
         # Wait until size is > 1 GB
-        start_time = time.time()
-        while data_stream.byte_size() < GIGABYTE:
-            elapsed = time.time() - start_time
-            # every 5 minutes print out status report
-            if elapsed > 5 * 60.0:
-                start_time = time.time()
-                print('Size of tweets: {} Bytes'.format(data_stream.byte_size()))
+        user = ''
+        while user != 'quit':
+            user = input('Type \'quit\' to exit out, type anything else to get a status update: ')
+            print('Tweets gathered: {}'.format(len(data_stream.data)))
 
         stream.close_stream()
         file_stream = FileStream(config.TWEETS_FILE)

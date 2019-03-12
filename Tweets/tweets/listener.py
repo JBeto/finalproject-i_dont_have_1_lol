@@ -1,6 +1,5 @@
 from abc import ABC, abstractmethod
 import logging
-import sys
 
 
 _logger = logging.getLogger(__name__)
@@ -41,15 +40,17 @@ class FileStream(StreamListener):
 class ListStream(StreamListener):
     def __init__(self):
         self.data = []
+        self.backup_file = None
 
     def on_open(self):
         _logger.debug('Writing to the list')
+        self.backup_file = open('backup.data', 'w')
 
     def on_close(self):
         _logger.debug('End write to list')
+        self.backup_file.close()
 
     def read_data(self, json_data):
         self.data.append(json_data)
-
-    def byte_size(self):
-        return sys.getsizeof(self.data)
+        self.backup_file.write(json_data)
+        self.backup_file.write('\n')
