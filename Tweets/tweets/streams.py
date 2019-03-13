@@ -5,14 +5,14 @@ import multiprocessing as mp
 import requests
 import logging
 import json
-
+import time
 
 _logger = logging.getLogger(__name__)
 
 
 def _get_url(tweet_dict):
     if 'entities' in tweet_dict and 'urls' in tweet_dict['entities'] and len(tweet_dict['entities']['urls']) > 0:
-        return tweet_dict['entities']['urls'][0]['url']
+        return tweet_dict['entities']['urls'][0]['expanded_url']
     return None
 
 
@@ -25,8 +25,9 @@ def add_url_title(tweet):
             page = requests.get(url, timeout=3)
             soup = BeautifulSoup(page.text, 'html.parser')
             tweet_dict['url_title'] = soup.title.string if soup.title is not None else None
+            _logger.info('Adding url title to this tweet: {}'.format(url))
         except requests.RequestException as e:
-            _logger.error('Error when parsing tweet url title: {}'.format(type(e)))
+            _logger.info('Error when parsing tweet url title: {}'.format(type(e)))
             tweet_dict['url_title'] = None
     else:
         tweet_dict['url_title'] = None
@@ -38,10 +39,8 @@ def add_url_title(tweet):
 
 def map_urls(tweets, listener, max_workers=8):
     p = mp.Pool(max_workers)
-    listener.on_open()
     for item in p.map(add_url_title, tweets):
         listener.read_data(item)
-    listener.on_close()
 
 
 class FilterStream:
@@ -62,31 +61,40 @@ class FilterStream:
         session = requests.Session()
         # filter for tweets with geo-location data only
         geo_filter = [('locations', [-180, -90, 180, 90])]
-        response = session.request(method='POST',
-                                   url=config.API_URLS['stream_filter'],
-                                   data=geo_filter,
-                                   stream=True,
-                                   auth=self.auth)
 
-        if response.status_code == 200:
-            try:
-                self.stream_listener.on_open()
-                # warning: iter_lines is not re-entrant safe
-                for line in response.iter_lines():
-                    if self._closed.is_set():
-                        return
-                    if line:
-                        tweet_json = line.decode('utf-8')
-                        self.stream_listener.read_data(tweet_json)
-            finally:
-                # cleanup
-                _logger.info('Stopping data collection of twitter stream')
-                self.stream_listener.on_close()
-                self._is_running.clear()
-                self._closed.clear()
-                response.close()
-        else:
-            raise requests.RequestException('There was an error in the request!')
+        should_stop = False
+        while not should_stop:
+            response = session.request(method='POST',
+                                       url=config.API_URLS['stream_filter'],
+                                       data=geo_filter,
+                                       stream=True,
+                                       auth=self.auth)
+
+            if response.status_code == 200:
+                try:
+                    self.stream_listener.on_open()
+                    # warning: iter_lines is not re-entrant safe
+                    for line in response.iter_lines():
+                        if self._closed.is_set():
+                            should_stop = True
+                            response.close()
+                            break
+                        if line:
+                            tweet_json = line.decode('utf-8')
+                            self.stream_listener.read_data(tweet_json)
+                except requests.RequestException as e:
+                    minutes = 10
+                    _logger.info('There was a connection issue, reconnecting in {} minutes: {}'
+                                 .format(minutes, type(e)))
+                    time.sleep(minutes * 60)
+            else:
+                raise requests.RequestException('There was an error in the request!')
+
+        # cleanup
+        _logger.info('Stopping data collection of twitter stream')
+        self.stream_listener.on_close()
+        self._is_running.clear()
+        self._closed.clear()
 
     def stream_async_geo_data(self):
         if self.is_running():

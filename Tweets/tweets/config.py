@@ -4,7 +4,9 @@ import os
 # KEYS / SECRETS #
 ##################
 
+
 TWEETS_FILE = 'tweets.data'
+URL_TITLE_FILE = 'tweets_url.data'
 LOG_FILE = '../tweets.log'
 
 ##################
