@@ -61,8 +61,29 @@ The architecture is split into a few basic modules. Their functionalities are li
 * JVM
 * Java 8.0
 * Bash
+* Lucene Core (from http://lucene.apache.org/core/)
+* org.json library (https://github.com/stleary/JSON-java)
 
 
 ### Quick-Start
+Make sure lucene 7.7.1 is downloaded and extracted (from http://lucene.apache.org/core/)
+The .jar files we will need are:
+* lucene-analyzers-common-7.7.1.jar
+* lucene-core-7.7.1.jar
+* lucene-demo-7.7.1.jar
+* lucene-queryparser-7.7.1.jar
+
+Make sure the json library .jar file is downloaded (download .jar file from https://github.com/stleary/JSON-java)
+
+If required, setup the environment in IntelliJ:
+	Go to File -> Project Structure
+	Under Modules, set Module SDK to Java 11
+		Click the + button, and "add JARs or directories".
+		Add the previously downloaded .jar files
+
+* Copy tweets data file to the same folder as LuceneIndexer.java
+
+* Change indexPath in LuceneIndexer.java to desired path to where you want the index to be stored
 
 ### Architecture
+Running LuceneIndexer.java with the above settings and data files, will create an index that will be stored where indexPath is set. 
