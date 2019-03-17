@@ -23,6 +23,7 @@ The overall architecture is split up into 3 components:
 
 ### Requirements
 * Python 3.6
+* Pip installed for Python 3.6
 * Bash
 
 
@@ -30,6 +31,7 @@ The overall architecture is split up into 3 components:
 
 * Navigate to the `Tweets` directory
 * Run `./install.sh` to install the Python dependencies in a virtual environment called `venv`
+* Alternatively, you can create and activate the virtual environment manually through the `virtualenv` package and install the dependencies with:  `pip install -r requirements.txt`
 * Run `./crawler.sh <CONSUMER_KEY> <CONSUMER_SECRET> <ACCESS_TOKEN> <ACCESS_SECRET>`
 * The output should be the following files: `tweets.data` and `tweets_url.data`
 
