@@ -8,9 +8,12 @@ Our project uses the Twitter Streaming API to collect geolocated tweets. Using t
 
 ## What's Included?
 
+* Our final report is under the `Docs` folder
 * The tweet data is included in the form of a zip file on Google Docs: https://drive.google.com/open?id=1mgS_NXTQot8IfSjySKdXW5dIyH-T--na
 
-* The source files for the Tweet Stream are included in the `tweets` folder under `Tweets` while the Lucene Index / Geolocations are included in the `src` folder under `Queries`.
+* The source files for the Tweet Stream are included in the `tweets` folder under `Tweets`
+* The Lucene Index files are under `JavaIndexer`
+* The geolocation extension files are under `Frontend`
 
 ## Overall Architecture
 The overall architecture is split up into 3 components:
