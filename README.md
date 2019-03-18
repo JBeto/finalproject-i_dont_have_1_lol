@@ -105,14 +105,18 @@ Running LuceneIndexer.java with the above settings and data files, will create a
 Navigate to the Frontend directory. In Map.py edit the google maps API key to your own API key.
 To compile the LuceneIndexer.java in the JavaIndexer/LuceneIndexer/src/lucene we need to compile it with the correct classpaths.
 To compile LuceneIndexer:
+
 javac LuceneIndexer.java -cp /path to lucene7.7.1/lucene-7.7.1/core/lucene-core-7.7.1.jar:/path to lucene7.7.1/lucene-7.7.1/queryparser/lucene-queryparser-7.7.1.jar:/path to lucene7.7.1/lucene-7.7.1/analysis/common/lucene-analyzers-common-7.7.1.jar:/path to lucene7.7.1/lucene-7.7.1/demo/lucene-demo-7.7.1.jar:/path to JSON-java/JSON-java/json-20180813.jar:/path to jython/jython.jar  
 
 (optional) Once we have Lucene Indexer compiled we can create the indexer using this. However since a final_indexer is already in the repo this step isnt necessary.
+
 java -cp /path to lucene7.7.1/lucene-7.7.1/core/lucene-core-7.7.1.jar:/path to lucene7.7.1/lucene-7.7.1/queryparser/lucene-queryparser-7.7.1.jar:/path to lucene7.7.1/lucene-7.7.1/analysis/common/lucene-analyzers-common-7.7.1.jar:/path to lucene7.7.1/lucene-7.7.1/demo/lucene-demo-7.7.1.jar:/path to JSON-java/JSON-java/json-20180813.jar:/path to jython/jython.jar:. LuceneIndexer    
 
 This will create an indexer with the indexer name specified in LuceneIndexer.java.
 
+To allow jython to run with classpaths during the map.py execution you must go into the jython script itself and add the same classpaths that we compiled the LuceneIndexer.java with. Once we have this our webserver can make multiple requests to the Lucene Indexer. 
 The next step is to run the map.py script from the LuceneIndexer.java directory:
+
 jython /Frontend/map.py
 
 
