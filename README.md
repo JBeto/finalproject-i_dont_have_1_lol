@@ -1,6 +1,6 @@
-##Flask Front end Creating Lucene Index.
+## Flask Front end Creating Lucene Index.
 
-###Requirements
+### Requirements
 * JVM
 * Java 8.0
 * Lucene core
@@ -24,7 +24,7 @@ The next step is to run the map.py script from the LuceneIndexer.java directory:
 jython /Frontend/map.py
 
 
-###Architecture
+### Architecture
 In the Frontend folder there is a map.py script that runs the webserver and a folder called templates.
 In templates it contains our html file that gives us the design for the page.  
 
